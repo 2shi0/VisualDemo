@@ -3,33 +3,29 @@
 
 m5_display::m5_display()
 {
-    color = 0;
-    flag = true;
-
-    Serial.begin(115200);
 }
 
 void m5_display::init()
 {
     M5.begin();
-
-    sprite.createSprite(M5.Lcd.width(), M5.Lcd.height());
-    sprite.fillScreen(color);
-    sprite.pushSprite(0, 0);
+    M5.Lcd.setRotation(1);
 }
 
-void m5_display::draw()
+void m5_display::draw(int degree)
 {
-    if (color < 1 || color > 255)
-        flag = !flag;
+    // 背景のスプライト
+    mainSprite.createSprite(M5.Lcd.width(), M5.Lcd.height());
 
-    if (flag)
-        color++;
-    else
-        color--;
+    // sprite.fillScreenは縦向きの場合のみ機能
+    mainSprite.fillRect(0, 0, M5.Lcd.width(), M5.Lcd.height(), BLACK);
 
-    sprite.fillScreen(M5.Lcd.color565(color, color, color));
-    sprite.pushSprite(0, 0);
+    // 矢印のスプライト
+    arrowSprite.createSprite(M5.Lcd.width(), M5.Lcd.height());
+    arrowSprite.drawCircle(M5.Lcd.width() * 0.5, M5.Lcd.height() * 0.5, M5.Lcd.height() * 0.45, GREEN);
+    arrowSprite.drawRect(M5.Lcd.width() / 2, M5.Lcd.height() / 2, 50, 50, GREEN);
 
-    Serial.println((int)color);
+    arrowSprite.pushRotated(&mainSprite, degree, BLUE);
+
+    // LCDに転写
+    mainSprite.pushSprite(0, 0);
 }

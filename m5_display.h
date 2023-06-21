@@ -8,12 +8,11 @@ class m5_display
 public:
     m5_display();
     void init();
-    void draw();
+    void draw(int degree);
 
 private:
-    TFT_eSprite sprite = TFT_eSprite(&M5.Lcd);
-    char color;
-    bool flag;
+    TFT_eSprite mainSprite = TFT_eSprite(&M5.Lcd);
+    TFT_eSprite arrowSprite = TFT_eSprite(&M5.Lcd);
 };
 
 #endif
